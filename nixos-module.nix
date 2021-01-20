@@ -27,6 +27,17 @@ in
         };
       };
     };
+    secretConfig = lib.mkOption {
+      type = lib.types.nullOr lib.types.path;
+      description = ''
+        Path to a file containing a set of environment variables to override
+        the configuration file. Use this to store secrets (passwords, etc..)
+        that shouldn't end-up in the store.
+
+        The format is the one described in a note in
+        <https://docs.pretix.eu/en/latest/admin/config.html>
+      '';
+    };
   };
 
   config = lib.mkIf cfg.enable {
@@ -40,7 +51,8 @@ in
       ;
       image = "pretix/standalone:stable";
       cmd = ["all"];
-      extraOptions = ["--network=host"];
+      extraOptions = ["--network=host"] ++
+        lib.optionals (cfg.secretConfig != null) ["--env-file" "${cfg.secretConfig}" ];
     };
 
     services.redis = {
@@ -59,18 +71,6 @@ in
           };
         }
       ];
-    };
-
-    systemd.services.pretix-setup = lib.mkIf (hasLocalPostgres && (cfg.config.database.password ? null) != null) {
-      script = ''
-        # Setup the db
-        ${pkgs.utillinux}/bin/runuser -u ${config.services.postgresql.superUser} -- ${config.services.postgresql.package}/bin/psql -c "ALTER ROLE ${cfg.config.database.user} WITH PASSWORD '${cfg.config.database.password}'"
-      '';
-
-      after = [ "postgresql.service" ];
-      requires = [ "postgresql.service" ];
-      before = [ "${config.virtualisation.oci-containers.backend}-pretix.service" ];
-      requiredBy = [ "${config.virtualisation.oci-containers.backend}-pretix.service" ];
     };
 
     warnings =
