@@ -6,9 +6,14 @@
     flake-utils.url = "github:numtide/flake-utils";
 
     nixpkgs.url = "nixpkgs/nixos-20.09";
+
+    pip2nixSrc = {
+      url = "github:nix-community/pip2nix/nixos-20.09";
+      flake = false;
+    };
   };
 
-  outputs = { self, nixpkgs, flake-utils }:
+  outputs = { self, nixpkgs, pip2nixSrc, flake-utils }:
   flake-utils.lib.eachDefaultSystem (
     system:
     let pkgs = import nixpkgs {
@@ -16,10 +21,12 @@
       overlays = [ self.overlay ];
     }; in
     { # See later whether I want to actually package this
+      defaultPackage = pkgs.pip2nix;
     }
     ) // {
 
       overlay = final: prev: {
+        pip2nix = import pip2nixSrc { pkgs = prev; };
       };
 
       nixosModules.pretix = {
