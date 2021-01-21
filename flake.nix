@@ -22,10 +22,38 @@
     }; in
     { # See later whether I want to actually package this
       defaultPackage = pkgs.pretix;
+      packages = {
+        inherit (pkgs) pretix update-pretix;
+      };
     }
     ) // {
 
       overlay = final: prev: {
+        update-pretix = prev.writeScriptBin "update-pretix" ''
+          #!/usr/bin/env bash
+
+          set -euo pipefail
+          set -x
+
+          export PATH=${prev.lib.concatMapStringsSep ":" (x: "${x}/bin") (prev.stdenv.initialPath ++ [final.poetry prev.stdenv.cc])}:$PATH
+
+          POETRY=${final.poetry}/bin/poetry
+
+          workdir=$(mktemp -d)
+          trap "rm -rf \"$workdir\"" EXIT
+
+          pushd "$workdir"
+          cp ${./pyproject.toml.template} pyproject.toml
+          chmod +w pyproject.toml
+          cat ${pretixSrc}/src/requirements/production.txt | \
+            sed -e 's/#.*//' -e 's/\([=<>]\)/@&/' | \
+            xargs "$POETRY" add
+
+          poetry add gunicorn
+
+          popd
+          cp "$workdir"/{pyproject.toml,poetry.lock} ./
+        '';
         pretix = (prev.poetry2nix.mkPoetryApplication {
           projectDir = pretixSrc;
           pyproject = ./pyproject.toml;
