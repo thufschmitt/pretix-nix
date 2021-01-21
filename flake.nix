@@ -7,13 +7,13 @@
 
     nixpkgs.url = "nixpkgs/nixos-20.09";
 
-    pip2nixSrc = {
-      url = "github:nix-community/pip2nix/nixos-20.09";
+    pretixSrc = {
+      url = "github:pretix/pretix";
       flake = false;
     };
   };
 
-  outputs = { self, nixpkgs, pip2nixSrc, flake-utils }:
+  outputs = { self, nixpkgs, pretixSrc, flake-utils }:
   flake-utils.lib.eachDefaultSystem (
     system:
     let pkgs = import nixpkgs {
@@ -21,12 +21,43 @@
       overlays = [ self.overlay ];
     }; in
     { # See later whether I want to actually package this
-      defaultPackage = pkgs.pip2nix;
+      defaultPackage = pkgs.pretix;
     }
     ) // {
 
       overlay = final: prev: {
-        pip2nix = import pip2nixSrc { pkgs = prev; };
+        pretix = (prev.poetry2nix.mkPoetryApplication {
+          projectDir = pretixSrc;
+          pyproject = ./pyproject.toml;
+          poetrylock = ./poetry.lock;
+          src = pretixSrc + "/src";
+          overrides = prev.poetry2nix.overrides.withDefaults (
+            pself: psuper: {
+              # The tlds package is an ugly beast which fetches its content
+              # at build-time. So instead replace it by a fixed hardcoded
+              # version.
+              tlds = psuper.tlds.overrideAttrs (a: {
+                src = prev.fetchFromGitHub {
+                  owner = "regnat";
+                  repo = "tlds";
+                  rev = "3c1c0ce416e153a975d7bc753694cfb83242071e";
+                  sha256 = "sha256-u6ZbjgIVozaqgyVonBZBDMrIxIKOM58GDRcqvyaYY+8=";
+                };
+              });
+              # For some reason, tqdm is missing a dependency on toml
+              tqdm = psuper.tqdm.overrideAttrs (a: {
+                buildInputs = (a.buildInputs or []) ++ [ prev.python3Packages.toml ];
+              });
+              django-scopes = psuper.django-scopes.overrideAttrs (a: {
+                # Django-scopes does something fishy to determine its version,
+                # which breaks with Nix
+                prePatch = (a.prePatch or "") + ''
+                  sed -i "s/version = '?'/version = '${a.version}'/" setup.py
+                '';
+              });
+            }
+          );
+        }).dependencyEnv;
       };
 
       nixosModules.pretix = {
@@ -63,6 +94,8 @@
                 };
               };
               secretConfig = pretix_secret_cfg;
+              host = "0.0.0.0";
+              port = 8000;
             };
 
             # Ad-hoc initialisation of the database password.

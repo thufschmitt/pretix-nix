@@ -30,20 +30,19 @@
         "type": "indirect"
       }
     },
-    "pip2nixSrc": {
+    "pretixSrc": {
       "flake": false,
       "locked": {
-        "lastModified": 1607882636,
-        "narHash": "sha256-ADby25bS2JN5UCCa1oooZZ9s7WTDy3/e91dSbHpXg+A=",
-        "owner": "nix-community",
-        "repo": "pip2nix",
-        "rev": "cc05877f1d872a20e457fbbb71212870085b1f3e",
+        "lastModified": 1611144998,
+        "narHash": "sha256-QmtOzJrCyhlaB5pkPk50dmVDGtd309cTo7BViYQ9/7U=",
+        "owner": "pretix",
+        "repo": "pretix",
+        "rev": "eb80cf248e189b4dcb032860f544dc72a8f7c7ab",
         "type": "github"
       },
       "original": {
-        "owner": "nix-community",
-        "ref": "nixos-20.09",
-        "repo": "pip2nix",
+        "owner": "pretix",
+        "repo": "pretix",
         "type": "github"
       }
     },
@@ -51,7 +50,7 @@
       "inputs": {
         "flake-utils": "flake-utils",
         "nixpkgs": "nixpkgs",
-        "pip2nixSrc": "pip2nixSrc"
+        "pretixSrc": "pretixSrc"
       }
     }
   },
