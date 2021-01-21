@@ -145,7 +145,7 @@
               serviceConfig.EnvironmentFile = pretix_secret_cfg;
             };
 
-            networking.firewall.allowedTCPPorts = [ 80 ];
+            networking.firewall.allowedTCPPorts = [ config.services.pretix.port ];
             networking.hostName = "pretix";
             services.mingetty.autologinUser = "root";
           })
