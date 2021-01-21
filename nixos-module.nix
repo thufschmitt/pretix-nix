@@ -14,16 +14,12 @@ in
 {
   options.services.pretix = {
     enable = lib.mkEnableOption "pretix";
-    url = lib.mkOption {
-      type = lib.types.str;
-      example = "pretix.de";
-    };
     config = lib.mkOption rec {
       type = lib.types.attrs;
       default = {
         pretix = {
           instance_name = config.networking.hostName;
-          url = cfg.url;
+          url = "${cfg.host}:${toString cfg.port}";
         };
       };
     };

@@ -113,7 +113,6 @@
 
               services.pretix = {
                 enable = true;
-                url = "localhost:8080";
                 config = {
                   database = {
                     backend = "postgresql";
