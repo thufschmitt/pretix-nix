@@ -1,4 +1,4 @@
-% Pretix-nix
+# Pretix-nix
 
 Nix packaging for https://pretix.eu
 
@@ -16,4 +16,17 @@ firefox http://localhost:8000
 
 ## Updating pretix
 
-After having updated the source with `nix flake update --update-input pretixSrc`, run `nix run .#update-pretix` (and go take a coffee) to generate a new `pyproject.toml` and `poetry.lock` which will be transparently consumed by `poetry2nix`. Then commit these new files, and you're good (hopefully).
+To update pretix to a new version:
+
+```shell
+# Update the source to a newer version
+nix flake update --update-input pretixSrc
+# Update the pyproject.toml and poetry.lock to match the new package requirements
+nix run .#update-pretix # And go take a coffee
+```
+
+## Caveats
+
+1. The update process is a bit wonky and I can't really guaranty that it'll stay reliable in the long term
+2. The NixOS module only had a shallow testing and there's many moving parts (a celery worker, a cron job, …), it's possible that one of these misbehaves and I didn't notice it
+3. A few things are hardcoded in the NixOS module (like using a local celery&rabbitmq)
