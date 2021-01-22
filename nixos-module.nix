@@ -79,6 +79,7 @@ in
         DynamicUser = true;
         PrivateTmp = true;
         Restart = "on-failure";
+        TimeoutStartSec = 300; # For some reason the first migration is pretty long
       };
       environment.PRETIX_CONFIG_FILE="${configFile}";
 
