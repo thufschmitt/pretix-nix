@@ -21,6 +21,14 @@ in
           instance_name = config.networking.hostName;
           url = "${cfg.host}:${toString cfg.port}";
         };
+        redis = {
+          location = "redis://127.0.0.1/0";
+          sessions = true;
+        };
+        celery = {
+          backend = "redis://127.0.0.1/1";
+          broker = "redis://127.0.0.1/2";
+        };
       };
     };
     host = lib.mkOption {
@@ -60,11 +68,33 @@ in
     #     lib.optionals (cfg.secretConfig != null) ["--env-file" "${cfg.secretConfig}" ];
     # };
 
+    users.users.pretix = {
+      group = "pretix";
+      isSystemUser = true;
+    };
+    users.groups.pretix = {};
+
+    systemd.services.pretix-worker = {
+      serviceConfig = {
+        WorkingDirectory="/var/lib/pretix";
+        ExecStart = ''
+          ${pkgs.pretix}/bin/celery -A pretix.celery_app worker -l info
+        '';
+        EnvironmentFile="${cfg.secretConfig}";
+        StateDirectory="pretix";
+        PrivateTmp = true;
+        User = "pretix";
+        Group = "pretix";
+      };
+      environment.PRETIX_CONFIG_FILE="${configFile}";
+
+      wantedBy = ["multi-user.target"];
+    };
+
     systemd.services.pretix = {
       path = [ pkgs.gettext ];
       preStart = ''
         ${pkgs.pretix}/bin/python -m pretix migrate
-        # ${pkgs.pretix}/bin/python -m pretix rebuild
       '';
       serviceConfig = {
         WorkingDirectory="/var/lib/pretix";
@@ -76,7 +106,8 @@ in
           '';
         EnvironmentFile="${cfg.secretConfig}";
         StateDirectory="pretix";
-        DynamicUser = true;
+        User = "pretix";
+        Group = "pretix";
         PrivateTmp = true;
         Restart = "on-failure";
         TimeoutStartSec = 300; # For some reason the first migration is pretty long
@@ -103,6 +134,7 @@ in
         }
       ];
     };
+    services.rabbitmq.enable = true;
 
     warnings =
       (if cfg.config ? mail then [] else [
