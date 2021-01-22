@@ -117,6 +117,24 @@ in
       wantedBy = ["multi-user.target"];
     };
 
+    systemd.services.pretix-periodic = {
+      serviceConfig = {
+        WorkingDirectory="/var/lib/pretix";
+        ExecStart = ''
+          ${pkgs.pretix}/bin/python -m pretix runperiodic
+          '';
+        EnvironmentFile="${cfg.secretConfig}";
+        StateDirectory="pretix";
+        User = "pretix";
+        Group = "pretix";
+        PrivateTmp = true;
+      };
+      environment.PRETIX_CONFIG_FILE="${configFile}";
+
+      wantedBy = ["multi-user.target"];
+      startAt = "minutely";
+    };
+
     services.redis = {
       enable = true;
       unixSocket = "/var/run/redis/redis.sock";
