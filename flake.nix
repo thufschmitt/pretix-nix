@@ -53,10 +53,16 @@
 
           poetry add gunicorn
 
+          ${final.nodePackages.node2nix}/bin/node2nix -l ${pretixSrc}/src/pretix/static/npm_dir/package-lock.json -i ${pretixSrc}/src/pretix/static/npm_dir/package.json
+
           popd
-          cp "$workdir"/{pyproject.toml,poetry.lock} ./
+          cp "$workdir"/{pyproject.toml,poetry.lock,node-packages.nix,node-env.nix} ./
+          cp "$workdir"/default.nix ./npm.nix
         '';
-        pretix = (prev.poetry2nix.mkPoetryApplication {
+
+        pretix = let
+          nodeDependencies = (final.callPackage ./npm.nix {}).shell.nodeDependencies;
+        in (prev.poetry2nix.mkPoetryApplication {
           projectDir = pretixSrc;
           pyproject = ./pyproject.toml;
           poetrylock = ./poetry.lock;
@@ -89,14 +95,30 @@
 	    css-inline = psuper.css-inline.override {
               preferWheel = true;
             };
-	    django-hijack = prev.python3Packages.django_hijack;
+	    django-hijack = psuper.django-hijack.overridePythonAttrs (
+              old: {
+                prePatch = (old.prePatch or "") + ''
+		  sed -i 's|cmd = \["npm", "run", "build"\]|cmd = ["${prev.nodejs}/bin/node", "${prev.nodePackages.postcss}/lib/node_modules/postcss/package.json", "hijack/static/hijack/hijack.scss", "-o", "/hijack/static/hijack/hijack.min.css"]|' setup.py
+		  sed -ie '/cmd = \["npm", "ci"\]/,+2d' setup.py
+		'';
+              }
+	    );
 	    pretix = psuper.pretix.overrideAttrs (a: {
               buildInputs = (a.buildInputs or [ ])
               ++ [ prev.nodePackages.npm ];
             });
           });
+	  prePatch = ''
+	    sed -i "/subprocess.check_call(\['npm', 'install'/d" setup.py
+	  '';
+	  preBuild = ''
+            mkdir -p pretix/static.dist/node_prefix/
+            ln -s ${nodeDependencies}/lib/node_modules ./pretix/static.dist/node_prefix/node_modules
+            export PATH="${nodeDependencies}/bin:$PATH"
+          '';
 	  nativeBuildInputs = [
 	    prev.nodePackages.npm
+	    nodeDependencies
 	  ];
         }).dependencyEnv;
       };
