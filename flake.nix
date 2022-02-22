@@ -5,7 +5,7 @@
     # Some utility functions to make the flake less boilerplaty
     flake-utils.url = "github:numtide/flake-utils";
 
-    nixpkgs.url = "nixpkgs/nixos-20.09";
+    nixpkgs.url = "nixpkgs/nixos-21.11";
 
     pretixSrc = {
       url = "github:pretix/pretix";
@@ -47,8 +47,8 @@
           pushd "$workdir"
           cp ${./pyproject.toml.template} pyproject.toml
           chmod +w pyproject.toml
-          cat ${pretixSrc}/src/requirements/production.txt | \
-            sed -e 's/#.*//' -e 's/\([=<>]\)/@&/' | \
+          cat ${pretixSrc}/src/setup.py | \
+            sed -n -e '/install_requires/,/]/p' | head -n -1 | tail -n +2 | sed -e "s/',//g" -e "s/\s*'//g" -e 's/#.*//' -e 's/\([=<>]\)/@&/' | \
             xargs "$POETRY" add
 
           poetry add gunicorn
@@ -67,18 +67,18 @@
             # version.
             tlds = psuper.tlds.overrideAttrs (a: {
               src = prev.fetchFromGitHub {
-                owner = "regnat";
+                owner = "n0emis";
                 repo = "tlds";
-                rev = "3c1c0ce416e153a975d7bc753694cfb83242071e";
+                rev = "0bea3cd1e6dd90c472933194a1137a1ea065a812";
                 sha256 =
-                  "sha256-u6ZbjgIVozaqgyVonBZBDMrIxIKOM58GDRcqvyaYY+8=";
+                  "sha256-lW9hHfZLkXCpLOvYQ/5tVrurYY2OAP1wPu6cIz6n0+I=";
               };
             });
             # For some reason, tqdm is missing a dependency on toml
-            tqdm = psuper.tqdm.overrideAttrs (a: {
-              buildInputs = (a.buildInputs or [ ])
-              ++ [ prev.python3Packages.toml ];
-            });
+            #tqdm = psuper.tqdm.overrideAttrs (a: {
+            #  buildInputs = (a.buildInputs or [ ])
+            #  ++ [ prev.python3Packages.toml ];
+            #});
             django-scopes = psuper.django-scopes.overrideAttrs (a: {
               # Django-scopes does something fishy to determine its version,
               # which breaks with Nix
@@ -86,7 +86,18 @@
                 sed -i "s/version = '?'/version = '${a.version}'/" setup.py
               '';
             });
+	    css-inline = psuper.css-inline.override {
+              preferWheel = true;
+            };
+	    django-hijack = prev.python3Packages.django_hijack;
+	    pretix = psuper.pretix.overrideAttrs (a: {
+              buildInputs = (a.buildInputs or [ ])
+              ++ [ prev.nodePackages.npm ];
+            });
           });
+	  nativeBuildInputs = [
+	    prev.nodePackages.npm
+	  ];
         }).dependencyEnv;
       };
 
@@ -133,7 +144,7 @@
                 script = ''
                   # Setup the db
                   set -eu
-
+e
                   ${pkgs.utillinux}/bin/runuser -u ${config.services.postgresql.superUser} -- \
                     ${config.services.postgresql.package}/bin/psql -c \
                     "ALTER ROLE ${config.services.pretix.config.database.user} WITH PASSWORD '$PRETIX_DATABASE_PASSWORD'"
@@ -150,7 +161,7 @@
                 [ config.services.pretix.port ];
 
               networking.hostName = "pretix";
-              services.mingetty.autologinUser = "root";
+              services.getty.autologinUser = "root";
             })
         ];
       };
