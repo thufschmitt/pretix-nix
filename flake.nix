@@ -8,7 +8,7 @@
     nixpkgs.url = "nixpkgs/nixos-21.11";
 
     pretixSrc = {
-      url = "github:pretix/pretix";
+      url = "github:pretix/pretix/v4.6.0";
       flake = false;
     };
   };
@@ -53,15 +53,17 @@
 
           poetry add gunicorn
 
-          ${final.nodePackages.node2nix}/bin/node2nix -l ${pretixSrc}/src/pretix/static/npm_dir/package-lock.json -i ${pretixSrc}/src/pretix/static/npm_dir/package.json
+	  cp ${pretixSrc}/src/pretix/static/npm_dir/{package.json,package-lock.json} ./
+
+          ${final.nodePackages.node2nix}/bin/node2nix -l ./package-lock.json -i ./package.json
 
           popd
-          cp "$workdir"/{pyproject.toml,poetry.lock,node-packages.nix,node-env.nix} ./
-          cp "$workdir"/default.nix ./npm.nix
+          cp "$workdir"/{pyproject.toml,poetry.lock,node-packages.nix,node-env.nix,package.json,package-lock.json} ./
+          cp "$workdir"/default.nix ./node.nix
         '';
 
         pretix = let
-          nodeDependencies = (final.callPackage ./npm.nix {}).shell.nodeDependencies;
+          nodeDependencies = (final.callPackage ./node.nix {}).shell.nodeDependencies;
         in (prev.poetry2nix.mkPoetryApplication {
           projectDir = pretixSrc;
           pyproject = ./pyproject.toml;

@@ -530,15 +530,14 @@ django-appconf = ">=1.0"
 
 [[package]]
 name = "djangorestframework"
-version = "3.13.1"
+version = "3.12.4"
 description = "Web APIs for Django, made easy."
 category = "main"
 optional = false
-python-versions = ">=3.6"
+python-versions = ">=3.5"
 
 [package.dependencies]
 django = ">=2.2"
-pytz = "*"
 
 [[package]]
 name = "dnspython"
@@ -1168,7 +1167,7 @@ python-versions = "*"
 
 [[package]]
 name = "tlds"
-version = "2022022100"
+version = "2022022200"
 description = "Automatically updated list of valid TLDs taken directly from IANA"
 category = "main"
 optional = false
@@ -1317,7 +1316,7 @@ testing = ["pytest (>=6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytest-
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "49ef78da0fdb62528bc6909d5c29a25f80d4e2c67cea422ef342e83b703ee202"
+content-hash = "6348af340364a3d85b52f2cf1d699a8b470ecfd5815f52f7cd5bfdf06caaf875"
 
 [metadata.files]
 amqp = [
@@ -1589,8 +1588,8 @@ django-statici18n = [
     {file = "django_statici18n-2.1.3-py2.py3-none-any.whl", hash = "sha256:0fa745f74a67fc451ecdd95a44a02a09f8f2669c824ce95192355ddae5db2170"},
 ]
 djangorestframework = [
-    {file = "djangorestframework-3.13.1-py3-none-any.whl", hash = "sha256:24c4bf58ed7e85d1fe4ba250ab2da926d263cd57d64b03e8dcef0ac683f8b1aa"},
-    {file = "djangorestframework-3.13.1.tar.gz", hash = "sha256:0c33407ce23acc68eca2a6e46424b008c9c02eceb8cf18581921d0092bc1f2ee"},
+    {file = "djangorestframework-3.12.4-py3-none-any.whl", hash = "sha256:6d1d59f623a5ad0509fe0d6bfe93cbdfe17b8116ebc8eda86d45f6e16e819aaf"},
+    {file = "djangorestframework-3.12.4.tar.gz", hash = "sha256:f747949a8ddac876e879190df194b925c177cdeb725a099db1460872f7c0a7f2"},
 ]
 dnspython = [
     {file = "dnspython-1.16.0-py2.py3-none-any.whl", hash = "sha256:f69c21288a962f4da86e56c4905b49d11aba7938d3d740e80d9e366ee4f1632d"},
@@ -2048,8 +2047,8 @@ text-unidecode = [
     {file = "text_unidecode-1.3-py2.py3-none-any.whl", hash = "sha256:1311f10e8b895935241623731c2ba64f4c455287888b18189350b67134a822e8"},
 ]
 tlds = [
-    {file = "tlds-2022022100-py2.py3-none-any.whl", hash = "sha256:385881a7972a72bb9135ba2ebd456c0e36402ae80c937b48088b2a6a0c30ef1b"},
-    {file = "tlds-2022022100.tar.gz", hash = "sha256:51735c4ef6101a55569f37b476119ee559d99f25e4625d0f420d2d40011e0310"},
+    {file = "tlds-2022022200-py2.py3-none-any.whl", hash = "sha256:5d02e06e9a8f86ad39c5be9c9213324d39002eca8321b15f580f684428641745"},
+    {file = "tlds-2022022200.tar.gz", hash = "sha256:2aa21c0bc8955edf53a2e70af3bd1cb10fbb3b9729345e39e84acb9028c4fc0c"},
 ]
 tqdm = [
     {file = "tqdm-4.62.3-py2.py3-none-any.whl", hash = "sha256:8dd278a422499cd6b727e6ae4061c40b48fce8b76d1ccbf5d34fca9b7f925b0c"},
