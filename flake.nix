@@ -5,6 +5,7 @@
     # Some utility functions to make the flake less boilerplaty
     flake-utils.url = "github:numtide/flake-utils";
 
+    #nixpkgs.url = "github:nixos/nixpkgs/master";
     nixpkgs.url = "nixpkgs/nixos-21.11";
 
     pretixSrc = {
@@ -55,7 +56,9 @@
 
 	  cp ${pretixSrc}/src/pretix/static/npm_dir/{package.json,package-lock.json} ./
 
-          ${final.nodePackages.node2nix}/bin/node2nix -l ./package-lock.json -i ./package.json
+          #${final.nodePackages.npm}/bin/npm install --package-lock-only
+
+          ${final.nodePackages.node2nix}/bin/node2nix --development -l ./package-lock.json -i ./package.json
 
           popd
           cp "$workdir"/{pyproject.toml,poetry.lock,node-packages.nix,node-env.nix,package.json,package-lock.json} ./
@@ -63,7 +66,22 @@
         '';
 
         pretix = let
-          nodeDependencies = (final.callPackage ./node.nix {}).shell.nodeDependencies;
+          nodejs = final.nodejs-14_x;
+          #nodeEnv = import ../../../development/node-packages/node-env.nix {
+          #  inherit (pkgs) stdenv lib python2 runCommand writeTextFile writeShellScript;
+          #  inherit pkgs nodejs;
+          #  libtool = if pkgs.stdenv.isDarwin then pkgs.darwin.cctools else null;
+          #};
+          #pretixNodePackages = import ./node-packages.nix {
+          #  inherit (pkgs) fetchurl nix-gitignore stdenv lib fetchgit;
+          #  inherit nodeEnv;
+          #};
+
+          nodeDependencies = ((final.callPackage ./node.nix {
+	    inherit nodejs;
+	  }).shell.override (old: {
+	    src = pretixSrc + "/src/pretix/static/npm_dir/";
+	  })).nodeDependencies;
         in (prev.poetry2nix.mkPoetryApplication {
           projectDir = pretixSrc;
           pyproject = ./pyproject.toml;
