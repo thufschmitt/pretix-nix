@@ -835,6 +835,14 @@ optional = false
 python-versions = "*"
 
 [[package]]
+name = "pretix-covid-certificates"
+version = "2.0.0"
+description = "This plugin allows to configure the validation of COVID test- and vaccination certificates using pretixSCAN for Android"
+category = "main"
+optional = false
+python-versions = "*"
+
+[[package]]
 name = "protobuf"
 version = "3.19.4"
 description = "Protocol Buffers"
@@ -1316,7 +1324,7 @@ testing = ["pytest (>=6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytest-
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "6348af340364a3d85b52f2cf1d699a8b470ecfd5815f52f7cd5bfdf06caaf875"
+content-hash = "4af3fa09a7899b01151eb9ec42c06da891a1bf0a2894430bdbb3b6fab8be5b1f"
 
 [metadata.files]
 amqp = [
@@ -1789,6 +1797,10 @@ platformdirs = [
 ply = [
     {file = "ply-3.11-py2.py3-none-any.whl", hash = "sha256:096f9b8350b65ebd2fd1346b12452efe5b9607f7482813ffca50c22722a807ce"},
     {file = "ply-3.11.tar.gz", hash = "sha256:00c7c1aaa88358b9c765b6d3000c6eec0ba42abca5351b095321aef446081da3"},
+]
+pretix-covid-certificates = [
+    {file = "pretix-covid-certificates-2.0.0.tar.gz", hash = "sha256:116cfabc1e768dc92a1c536cac5a37fadbe54914faf6980fec0e25bf830dcbc4"},
+    {file = "pretix_covid_certificates-2.0.0-py3-none-any.whl", hash = "sha256:39e9e0924408a641e3d207613aef49eb9e3f789ff59837a15d03e8ca894591a4"},
 ]
 protobuf = [
     {file = "protobuf-3.19.4-cp310-cp310-macosx_10_9_universal2.whl", hash = "sha256:f51d5a9f137f7a2cec2d326a74b6e3fc79d635d69ffe1b036d39fc7d75430d37"},
