@@ -52,6 +52,8 @@
             sed -n -e '/install_requires/,/]/p' | head -n -1 | tail -n +2 | sed -e "s/',//g" -e "s/\s*'//g" -e 's/#.*//' -e 's/\([=<>]\)/@&/' | \
             xargs "$POETRY" add
 
+          poetry add pretix-covid-certificates
+
           poetry add gunicorn
 
 	  cp ${pretixSrc}/src/pretix/static/npm_dir/{package.json,package-lock.json} ./
@@ -67,15 +69,6 @@
 
         pretix = let
           nodejs = final.nodejs-14_x;
-          #nodeEnv = import ../../../development/node-packages/node-env.nix {
-          #  inherit (pkgs) stdenv lib python2 runCommand writeTextFile writeShellScript;
-          #  inherit pkgs nodejs;
-          #  libtool = if pkgs.stdenv.isDarwin then pkgs.darwin.cctools else null;
-          #};
-          #pretixNodePackages = import ./node-packages.nix {
-          #  inherit (pkgs) fetchurl nix-gitignore stdenv lib fetchgit;
-          #  inherit nodeEnv;
-          #};
 
           nodeDependencies = ((final.callPackage ./node.nix {
 	    inherit nodejs;
@@ -100,11 +93,6 @@
                   "sha256-lW9hHfZLkXCpLOvYQ/5tVrurYY2OAP1wPu6cIz6n0+I=";
               };
             });
-            # For some reason, tqdm is missing a dependency on toml
-            #tqdm = psuper.tqdm.overrideAttrs (a: {
-            #  buildInputs = (a.buildInputs or [ ])
-            #  ++ [ prev.python3Packages.toml ];
-            #});
             django-scopes = psuper.django-scopes.overrideAttrs (a: {
               # Django-scopes does something fishy to determine its version,
               # which breaks with Nix
@@ -127,6 +115,9 @@
               buildInputs = (a.buildInputs or [ ])
               ++ [ prev.nodePackages.npm ];
             });
+	    pretix-covid-certificates = psuper.pretix-covid-certificates.override {
+              preferWheel = true;
+	    };
           });
 	  prePatch = ''
 	    sed -i "/subprocess.check_call(\['npm', 'install'/d" setup.py
