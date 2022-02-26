@@ -9,7 +9,7 @@
     nixpkgs.url = "nixpkgs/nixos-21.11";
 
     pretixSrc = {
-      url = "github:pretix/pretix/v4.6.0";
+      url = "github:pretix/pretix/v4.7.0";
       flake = false;
     };
   };

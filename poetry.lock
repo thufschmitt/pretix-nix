@@ -61,14 +61,14 @@ pytz = ">=2015.7"
 
 [[package]]
 name = "beautifulsoup4"
-version = "4.8.2"
+version = "4.10.0"
 description = "Screen-scraping library"
 category = "main"
 optional = false
-python-versions = "*"
+python-versions = ">3.0.0"
 
 [package.dependencies]
-soupsieve = ">=1.2"
+soupsieve = ">1.2"
 
 [package.extras]
 html5lib = ["html5lib"]
@@ -518,7 +518,7 @@ python-versions = "*"
 
 [[package]]
 name = "django-statici18n"
-version = "2.1.3"
+version = "2.2.0"
 description = "A Django app that provides helper for generating Javascript catalog to static files."
 category = "main"
 optional = false
@@ -530,14 +530,15 @@ django-appconf = ">=1.0"
 
 [[package]]
 name = "djangorestframework"
-version = "3.12.4"
+version = "3.13.1"
 description = "Web APIs for Django, made easy."
 category = "main"
 optional = false
-python-versions = ">=3.5"
+python-versions = ">=3.6"
 
 [package.dependencies]
 django = ">=2.2"
+pytz = "*"
 
 [[package]]
 name = "dnspython"
@@ -800,7 +801,7 @@ six = ">=1.0.0"
 
 [[package]]
 name = "phonenumberslite"
-version = "8.12.43"
+version = "8.12.44"
 description = "Python version of Google's common library for parsing, formatting, storing and validating international phone numbers."
 category = "main"
 optional = false
@@ -836,7 +837,7 @@ python-versions = "*"
 
 [[package]]
 name = "pretix-covid-certificates"
-version = "2.0.0"
+version = "2.1.0"
 description = "This plugin allows to configure the validation of COVID test- and vaccination certificates using pretixSCAN for Android"
 category = "main"
 optional = false
@@ -1018,7 +1019,7 @@ rlpycairo = ["rlPyCairo (>=0.0.5)"]
 
 [[package]]
 name = "requests"
-version = "2.26.0"
+version = "2.27.1"
 description = "Python HTTP for Humans."
 category = "main"
 optional = false
@@ -1156,7 +1157,7 @@ KidMagic = ["kid"]
 
 [[package]]
 name = "stripe"
-version = "2.42.0"
+version = "2.66.0"
 description = "Python bindings for the Stripe API"
 category = "main"
 optional = false
@@ -1175,7 +1176,7 @@ python-versions = "*"
 
 [[package]]
 name = "tlds"
-version = "2022022200"
+version = "2022022500"
 description = "Automatically updated list of valid TLDs taken directly from IANA"
 category = "main"
 optional = false
@@ -1324,7 +1325,7 @@ testing = ["pytest (>=6)", "pytest-checkdocs (>=2.4)", "pytest-flake8", "pytest-
 [metadata]
 lock-version = "1.1"
 python-versions = "^3.8"
-content-hash = "4791de4264110a3d4b98b46d40866cd447f3be85c33f7cd07bf3568ca432d86a"
+content-hash = "8aca44f90b5c1ab62c7bab8d2b1083b6ce2c2c6eea9531956dd507394df46b0c"
 
 [metadata.files]
 amqp = [
@@ -1349,9 +1350,8 @@ babel = [
     {file = "Babel-2.9.1.tar.gz", hash = "sha256:bc0c176f9f6a994582230df350aa6e05ba2ebe4b3ac317eab29d9be5d2768da0"},
 ]
 beautifulsoup4 = [
-    {file = "beautifulsoup4-4.8.2-py2-none-any.whl", hash = "sha256:e1505eeed31b0f4ce2dbb3bc8eb256c04cc2b3b72af7d551a4ab6efd5cbe5dae"},
-    {file = "beautifulsoup4-4.8.2-py3-none-any.whl", hash = "sha256:9fbb4d6e48ecd30bcacc5b63b94088192dcda178513b2ae3c394229f8911b887"},
-    {file = "beautifulsoup4-4.8.2.tar.gz", hash = "sha256:05fd825eb01c290877657a56df4c6e4c311b3965bda790c613a3d6fb01a5462a"},
+    {file = "beautifulsoup4-4.10.0-py3-none-any.whl", hash = "sha256:9a315ce70049920ea4572a4055bc4bd700c940521d36fc858205ad4fcde149bf"},
+    {file = "beautifulsoup4-4.10.0.tar.gz", hash = "sha256:c23ad23c521d818955a4151a67d81580319d4bf548d3d49f4223ae041ff98891"},
 ]
 billiard = [
     {file = "billiard-3.6.4.0-py3-none-any.whl", hash = "sha256:87103ea78fa6ab4d5c751c4909bcff74617d985de7fa8b672cf8618afd5a875b"},
@@ -1592,12 +1592,12 @@ django-scopes = [
     {file = "django_scopes-1.2.0-py3-none-any.whl", hash = "sha256:0cbfd95f1e4dcbeed7af603a91fb0f64de1419210449e8faad58bfa8c091d827"},
 ]
 django-statici18n = [
-    {file = "django-statici18n-2.1.3.tar.gz", hash = "sha256:b352c9e2910591ba6d313a6d8ae65dead40c69989f8e227bc2955c2c36d89f0d"},
-    {file = "django_statici18n-2.1.3-py2.py3-none-any.whl", hash = "sha256:0fa745f74a67fc451ecdd95a44a02a09f8f2669c824ce95192355ddae5db2170"},
+    {file = "django-statici18n-2.2.0.tar.gz", hash = "sha256:dbcdac190d93e0b4eabcab8875c8eb68795eceb442f926843ec5cbe1432fe628"},
+    {file = "django_statici18n-2.2.0-py2.py3-none-any.whl", hash = "sha256:81450c42da4aaa0f8de8307aad167883d8bbfa1c84a459084e1eacc2e7957648"},
 ]
 djangorestframework = [
-    {file = "djangorestframework-3.12.4-py3-none-any.whl", hash = "sha256:6d1d59f623a5ad0509fe0d6bfe93cbdfe17b8116ebc8eda86d45f6e16e819aaf"},
-    {file = "djangorestframework-3.12.4.tar.gz", hash = "sha256:f747949a8ddac876e879190df194b925c177cdeb725a099db1460872f7c0a7f2"},
+    {file = "djangorestframework-3.13.1-py3-none-any.whl", hash = "sha256:24c4bf58ed7e85d1fe4ba250ab2da926d263cd57d64b03e8dcef0ac683f8b1aa"},
+    {file = "djangorestframework-3.13.1.tar.gz", hash = "sha256:0c33407ce23acc68eca2a6e46424b008c9c02eceb8cf18581921d0092bc1f2ee"},
 ]
 dnspython = [
     {file = "dnspython-1.16.0-py2.py3-none-any.whl", hash = "sha256:f69c21288a962f4da86e56c4905b49d11aba7938d3d740e80d9e366ee4f1632d"},
@@ -1750,8 +1750,8 @@ paypalrestsdk = [
     {file = "paypalrestsdk-1.13.1.tar.gz", hash = "sha256:238713208031e8981bf70b3350b3d7f85ed64d34e0f21e4c1184444a546fee7f"},
 ]
 phonenumberslite = [
-    {file = "phonenumberslite-8.12.43-py2.py3-none-any.whl", hash = "sha256:20de88db9cc615dca8696163513c7a0c4a075c3e1195e14c8a45589fafb92377"},
-    {file = "phonenumberslite-8.12.43.tar.gz", hash = "sha256:e64d3d7d9f23bc6e623e4bc29810cd686548553141bf42f5f7b2e4a98a982b6b"},
+    {file = "phonenumberslite-8.12.44-py2.py3-none-any.whl", hash = "sha256:adfb3a2e710b0475c75abb5b8e53fa9d578764284a1d0393a7583792b1ecd6dc"},
+    {file = "phonenumberslite-8.12.44.tar.gz", hash = "sha256:f4b19deb32e0f4b80ae61b78764ec4b54dd05e15c7fa6c03f169e6784509b812"},
 ]
 pillow = [
     {file = "Pillow-9.0.1-1-cp310-cp310-macosx_11_0_arm64.whl", hash = "sha256:a5d24e1d674dd9d72c66ad3ea9131322819ff86250b30dc5821cbafcfa0b96b4"},
@@ -1799,8 +1799,8 @@ ply = [
     {file = "ply-3.11.tar.gz", hash = "sha256:00c7c1aaa88358b9c765b6d3000c6eec0ba42abca5351b095321aef446081da3"},
 ]
 pretix-covid-certificates = [
-    {file = "pretix-covid-certificates-2.0.0.tar.gz", hash = "sha256:116cfabc1e768dc92a1c536cac5a37fadbe54914faf6980fec0e25bf830dcbc4"},
-    {file = "pretix_covid_certificates-2.0.0-py3-none-any.whl", hash = "sha256:39e9e0924408a641e3d207613aef49eb9e3f789ff59837a15d03e8ca894591a4"},
+    {file = "pretix-covid-certificates-2.1.0.tar.gz", hash = "sha256:4962bcb9a60e6ad6b693b9a4e192ed943f5188daa48bd6e14e9a8ba351dac9f9"},
+    {file = "pretix_covid_certificates-2.1.0-py3-none-any.whl", hash = "sha256:8b6f79dcd60bb43b92cb68ed130ddfe49f9727bcbd1357335886679e2addd519"},
 ]
 protobuf = [
     {file = "protobuf-3.19.4-cp310-cp310-macosx_10_9_universal2.whl", hash = "sha256:f51d5a9f137f7a2cec2d326a74b6e3fc79d635d69ffe1b036d39fc7d75430d37"},
@@ -1998,8 +1998,8 @@ reportlab = [
     {file = "reportlab-3.6.7.tar.gz", hash = "sha256:d035054724278129aba2a55c3edd6111b07e625ad1ff845e3ba2a5e4e203bbc8"},
 ]
 requests = [
-    {file = "requests-2.26.0-py2.py3-none-any.whl", hash = "sha256:6c1246513ecd5ecd4528a0906f910e8f0f9c6b8ec72030dc9fd154dc1a6efd24"},
-    {file = "requests-2.26.0.tar.gz", hash = "sha256:b8aa58f8cf793ffd8782d3d8cb19e66ef36f7aba4353eec859e74678b01b07a7"},
+    {file = "requests-2.27.1-py2.py3-none-any.whl", hash = "sha256:f22fa1e554c9ddfd16e6e41ac79759e17be9e492b3587efa038054674760e72d"},
+    {file = "requests-2.27.1.tar.gz", hash = "sha256:68d7c56fd5a8999887728ef304a6d12edc7be74f1cfa47714fc8b414525c9a61"},
 ]
 requests-file = [
     {file = "requests-file-1.5.1.tar.gz", hash = "sha256:07d74208d3389d01c38ab89ef403af0cfec63957d53a0081d8eca738d0247d8e"},
@@ -2051,16 +2051,16 @@ static3 = [
     {file = "static3-0.7.0.tar.gz", hash = "sha256:674641c64bc75507af2eb20bef7e7e3593dca993dec6674be108fa15b42f47c8"},
 ]
 stripe = [
-    {file = "stripe-2.42.0-py2.py3-none-any.whl", hash = "sha256:eb5c2c35b2d31eaccb43983ca83de513b335100d9b71e79ca4c60085da464b77"},
-    {file = "stripe-2.42.0.tar.gz", hash = "sha256:89b2dcf6a84f0433cc15908c7be23f06a88e472065bb4f7542470ad97c053aef"},
+    {file = "stripe-2.66.0-py2.py3-none-any.whl", hash = "sha256:283f6f80d16cc5b473116697e0f4569df46b44826d1c78197880bce6dc066d0d"},
+    {file = "stripe-2.66.0.tar.gz", hash = "sha256:77c6032230f7714b1a1b459074f08c60d60c229b9c3beac372719063e3d1409c"},
 ]
 text-unidecode = [
     {file = "text-unidecode-1.3.tar.gz", hash = "sha256:bad6603bb14d279193107714b288be206cac565dfa49aa5b105294dd5c4aab93"},
     {file = "text_unidecode-1.3-py2.py3-none-any.whl", hash = "sha256:1311f10e8b895935241623731c2ba64f4c455287888b18189350b67134a822e8"},
 ]
 tlds = [
-    {file = "tlds-2022022200-py2.py3-none-any.whl", hash = "sha256:5d02e06e9a8f86ad39c5be9c9213324d39002eca8321b15f580f684428641745"},
-    {file = "tlds-2022022200.tar.gz", hash = "sha256:2aa21c0bc8955edf53a2e70af3bd1cb10fbb3b9729345e39e84acb9028c4fc0c"},
+    {file = "tlds-2022022500-py2.py3-none-any.whl", hash = "sha256:af118e1a15a7fe98c14df74a113240e717e526cbc42ff4413cda651620b8494d"},
+    {file = "tlds-2022022500.tar.gz", hash = "sha256:707be4cdc653d9d709c842687b1d174b4a08b39ad925139f175f81b32610420c"},
 ]
 tqdm = [
     {file = "tqdm-4.62.3-py2.py3-none-any.whl", hash = "sha256:8dd278a422499cd6b727e6ae4061c40b48fce8b76d1ccbf5d34fca9b7f925b0c"},
