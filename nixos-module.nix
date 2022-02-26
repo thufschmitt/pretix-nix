@@ -54,20 +54,6 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    # virtualisation.oci-containers.backend = lib.mkDefault "podman";
-    # virtualisation.oci-containers.containers.pretix = {
-    #   volumes = [
-    #     "pretix-data:/data"
-    #     "/var/run/redis:/var/run/redis"
-    #     "${configFile}:/etc/pretix/pretix.cfg"
-    #   ] ++ lib.optional hasLocalPostgres "/run/postgresql:/run/postgresql"
-    #   ;
-    #   image = "pretix/standalone:stable";
-    #   cmd = ["all"];
-    #   extraOptions = ["--network=host"] ++
-    #     lib.optionals (cfg.secretConfig != null) ["--env-file" "${cfg.secretConfig}" ];
-    # };
-
     users.users.pretix = {
       group = "pretix";
       isSystemUser = true;

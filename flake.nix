@@ -56,9 +56,7 @@
 
           poetry add gunicorn
 
-	  cp ${pretixSrc}/src/pretix/static/npm_dir/{package.json,package-lock.json} ./
-
-          #${final.nodePackages.npm}/bin/npm install --package-lock-only
+          cp ${pretixSrc}/src/pretix/static/npm_dir/{package.json,package-lock.json} ./
 
           ${final.nodePackages.node2nix}/bin/node2nix --development -l ./package-lock.json -i ./package.json
 
@@ -103,34 +101,32 @@
 	    css-inline = psuper.css-inline.override {
               preferWheel = true;
             };
-	    django-hijack = psuper.django-hijack.overridePythonAttrs (
-              old: {
-                prePatch = (old.prePatch or "") + ''
-		  sed -i 's|cmd = \["npm", "run", "build"\]|cmd = ["${prev.nodejs}/bin/node", "${prev.nodePackages.postcss}/lib/node_modules/postcss/package.json", "hijack/static/hijack/hijack.scss", "-o", "/hijack/static/hijack/hijack.min.css"]|' setup.py
-		  sed -ie '/cmd = \["npm", "ci"\]/,+2d' setup.py
-		'';
-              }
-	    );
-	    pretix = psuper.pretix.overrideAttrs (a: {
+	    django-hijack = psuper.django-hijack.overridePythonAttrs (a: {
+              prePatch = (a.prePatch or "") + ''
+                sed -i 's|cmd = \["npm", "run", "build"\]|cmd = ["${prev.nodejs}/bin/node", "${prev.nodePackages.postcss}/lib/node_modules/postcss/package.json", "hijack/static/hijack/hijack.scss", "-o", "/hijack/static/hijack/hijack.min.css"]|' setup.py
+                sed -ie '/cmd = \["npm", "ci"\]/,+2d' setup.py
+              '';
+            });
+            pretix = psuper.pretix.overrideAttrs (a: {
               buildInputs = (a.buildInputs or [ ])
               ++ [ prev.nodePackages.npm ];
             });
-	    pretix-covid-certificates = psuper.pretix-covid-certificates.override {
+            pretix-covid-certificates = psuper.pretix-covid-certificates.override {
               preferWheel = true;
-	    };
+            };
           });
-	  prePatch = ''
-	    sed -i "/subprocess.check_call(\['npm', 'install'/d" setup.py
-	  '';
-	  preBuild = ''
+          prePatch = ''
+            sed -i "/subprocess.check_call(\['npm', 'install'/d" setup.py
+          '';
+          preBuild = ''
             mkdir -p pretix/static.dist/node_prefix/
             ln -s ${nodeDependencies}/lib/node_modules ./pretix/static.dist/node_prefix/node_modules
             export PATH="${nodeDependencies}/bin:$PATH"
           '';
-	  nativeBuildInputs = [
-	    prev.nodePackages.npm
-	    nodeDependencies
-	  ];
+          nativeBuildInputs = [
+            prev.nodePackages.npm
+            nodeDependencies
+          ];
         }).dependencyEnv;
       };
 
@@ -177,7 +173,7 @@
                 script = ''
                   # Setup the db
                   set -eu
-e
+
                   ${pkgs.utillinux}/bin/runuser -u ${config.services.postgresql.superUser} -- \
                     ${config.services.postgresql.package}/bin/psql -c \
                     "ALTER ROLE ${config.services.pretix.config.database.user} WITH PASSWORD '$PRETIX_DATABASE_PASSWORD'"
