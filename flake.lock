@@ -33,16 +33,16 @@
     "pretixSrc": {
       "flake": false,
       "locked": {
-        "lastModified": 1645788704,
-        "narHash": "sha256-mDpIb/nRZH1tC8hFvqunJnVd+rlPw1USQh9PUl6UstE=",
+        "lastModified": 1646060867,
+        "narHash": "sha256-V3AuPmu1cnv98Mrdc0YnKfxOwyvLRzAh6HZeM0bWyvo=",
         "owner": "pretix",
         "repo": "pretix",
-        "rev": "798fdbf25bfad3dd8eec5bf32a0a20e0b8fcc156",
+        "rev": "91498f17b4570c1790695878305a055bbb22ab8f",
         "type": "github"
       },
       "original": {
         "owner": "pretix",
-        "ref": "v4.7.0",
+        "ref": "v4.7.1",
         "repo": "pretix",
         "type": "github"
       }
