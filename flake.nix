@@ -52,8 +52,6 @@
             sed -n -e '/install_requires/,/]/p' | head -n -1 | tail -n +2 | sed -e "s/',//g" -e "s/\s*'//g" -e 's/#.*//' -e 's/\([=<>]\)/@&/' | \
             xargs "$POETRY" add
 
-          poetry add pretix-covid-certificates
-
           poetry add gunicorn
 
           cp ${pretixSrc}/src/pretix/static/npm_dir/{package.json,package-lock.json} ./
