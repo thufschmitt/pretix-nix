@@ -63,7 +63,7 @@
           cp "$workdir"/default.nix ./node.nix
         '';
 
-        pretix = let
+        pretix-app = let
           nodejs = final.nodejs-14_x;
 
           nodeDependencies = ((final.callPackage ./node.nix {
@@ -71,7 +71,7 @@
 	  }).shell.override (old: {
 	    src = pretixSrc + "/src/pretix/static/npm_dir/";
 	  })).nodeDependencies;
-        in (prev.poetry2nix.mkPoetryApplication {
+        in prev.poetry2nix.mkPoetryApplication {
           projectDir = pretixSrc;
           pyproject = ./pyproject.toml;
           poetrylock = ./poetry.lock;
@@ -125,7 +125,8 @@
             prev.nodePackages.npm
             nodeDependencies
           ];
-        }).dependencyEnv;
+        };
+        pretix = final.pretix-app.dependencyEnv;
       };
 
       nixosModules.pretix = {
