@@ -109,9 +109,6 @@
               buildInputs = (a.buildInputs or [ ])
               ++ [ prev.nodePackages.npm ];
             });
-            pretix-covid-certificates = psuper.pretix-covid-certificates.override {
-              preferWheel = true;
-            };
           });
           prePatch = ''
             sed -i "/subprocess.check_call(\['npm', 'install'/d" setup.py
