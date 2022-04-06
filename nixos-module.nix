@@ -39,6 +39,10 @@ in
       type = lib.types.port;
       default = 8000;
     };
+    package = lib.mkOption {
+      type = lib.types.package;
+      default = pkgs.pretix;
+    };
 
     secretConfig = lib.mkOption {
       type = lib.types.nullOr lib.types.path;
@@ -54,20 +58,6 @@ in
   };
 
   config = lib.mkIf cfg.enable {
-    # virtualisation.oci-containers.backend = lib.mkDefault "podman";
-    # virtualisation.oci-containers.containers.pretix = {
-    #   volumes = [
-    #     "pretix-data:/data"
-    #     "/var/run/redis:/var/run/redis"
-    #     "${configFile}:/etc/pretix/pretix.cfg"
-    #   ] ++ lib.optional hasLocalPostgres "/run/postgresql:/run/postgresql"
-    #   ;
-    #   image = "pretix/standalone:stable";
-    #   cmd = ["all"];
-    #   extraOptions = ["--network=host"] ++
-    #     lib.optionals (cfg.secretConfig != null) ["--env-file" "${cfg.secretConfig}" ];
-    # };
-
     users.users.pretix = {
       group = "pretix";
       isSystemUser = true;
@@ -78,7 +68,7 @@ in
       serviceConfig = {
         WorkingDirectory="/var/lib/pretix";
         ExecStart = ''
-          ${pkgs.pretix}/bin/celery -A pretix.celery_app worker -l info
+          ${cfg.package}/bin/celery -A pretix.celery_app worker -l info
         '';
         EnvironmentFile="${cfg.secretConfig}";
         StateDirectory="pretix";
@@ -94,13 +84,12 @@ in
     systemd.services.pretix = {
       path = [ pkgs.gettext ];
       preStart = ''
-        ${pkgs.pretix}/bin/python -m pretix migrate
+        ${cfg.package}/bin/python -m pretix migrate
       '';
       serviceConfig = {
         WorkingDirectory="/var/lib/pretix";
         ExecStart = ''
-          ${pkgs.pretix}/bin/gunicorn \
-            --pythonpath ${pkgs.pretix}/lib/python3.8/site-packages pretix.wsgi \
+          ${cfg.package}/bin/gunicorn pretix.wsgi \
             --name pretix \
             -b ${cfg.host}:${toString cfg.port}
           '';
@@ -121,7 +110,7 @@ in
       serviceConfig = {
         WorkingDirectory="/var/lib/pretix";
         ExecStart = ''
-          ${pkgs.pretix}/bin/python -m pretix runperiodic
+          ${cfg.package}/bin/python -m pretix runperiodic
           '';
         EnvironmentFile="${cfg.secretConfig}";
         StateDirectory="pretix";
